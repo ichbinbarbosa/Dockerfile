@@ -11,17 +11,9 @@ ADD https://download.microsoft.com/download/6/A/A/6AA4EDFF-645B-48C5-81CC-ED5963
 
 ADD https://windows.php.net/downloads/releases/php-7.2.12-nts-Win32-VC15-x64.zip /php.zip
 
-ADD https://github.com/Microsoft/msphpsql/releases/download/v5.4.0-preview/Windows-7.2.zip /msphpsql.zip
+RUN Expand-Archive -Path /php.zip -DestinationPath /php
 
-RUN Expand-Archive -Path C:\php.zip -DestinationPath C:\php
-
-RUN Expand-Archive -Path C:\msphpsql.zip -DestinationPath C:\msphpsql
-
-RUN Copy-Item C:\msphpsql\Windows-7.2\x64\php_pdo_sqlsrv_72_nts.dll C:\php\ext
-
-RUN Copy-Item C:\msphpsql\Windows-7.2\x64\php_sqlsrv_72_nts.dll C:\php\ext
-
-RUN Copy-Item C:\PHP\php.ini-production C:\PHP\php.ini
+RUN Copy-Item /php/php.ini-production /php/php.ini
 
 ##
 # Build principal image
