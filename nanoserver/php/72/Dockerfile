@@ -12,9 +12,9 @@ RUN Invoke-WebRequest -Uri https://jbit.es/files/vcruntime140.dll -OutFile /vcru
 
 ##
 # Atention for this step
-# Download VC15 x64 Thread Safe
+# Download VC15 x64 Non Thread Safe
 #
-RUN Invoke-WebRequest -Uri https://windows.php.net/downloads/releases/php-7.2.14-Win32-VC15-x64.zip -OutFile /php.zip ; \
+RUN Invoke-WebRequest -Uri https://windows.php.net/downloads/releases/php-7.2.14-nts-Win32-VC15-x64.zip -OutFile /php.zip ; \
     Expand-Archive -Path /php.zip -DestinationPath /php ; \
     Copy-Item /php/php.ini-production /php/php.ini   
 
