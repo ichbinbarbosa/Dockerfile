@@ -22,32 +22,17 @@ FROM nanoserver/apache24
 COPY --from=dllcompile /php /php
 COPY --from=dllcompile /vcruntime140.dll /Windows/System32
 
-RUN mkdir sites-enabled ; \
-    Add-Content /Apache24/conf/httpd.conf "IncludeOptional sites-enabled/*.conf"
+##
+# Override httpd.conf
+#
+ADD extras/httpd.conf /Apache24/conf/httpd.conf
+
+RUN mkdir /Apache24/conf/sites-enabled
 
 ##
 # Set PHP environment variable. Enable php command line.
 #
+# @todo FIX THIS RUN. Dont work =(
+#
 RUN setx PATH /M %PATH%;C:\php ; \
-    && setx PHP /M "C:\php"
-
-# Enable required IIS Features
-#
-#RUN dism.exe /Online /Enable-Feature /FeatureName:IIS-CGI /All
-
-# Install VC Redist 14
-#
-#RUN C:\vc_redist.exe /quiet /install && del C:\vc_redist.exe
-
-# Configure IIS
-# Configure system PATH
-#
-#RUN %windir%\system32\inetsrv\appcmd.exe set config /section:system.webServer/fastCgi /+[fullPath='c:\php\php-cgi.exe'] \
-#    && %windir%\system32\inetsrv\appcmd.exe set config /section:system.webServer/handlers /+[name='PHP_via_FastCGI',path='*.php',verb='*',modules='FastCgiModule',scriptProcessor='c:\php\php-cgi.exe',resourceType='Either'] \
-#    && %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /[fullPath='c:\php\php-cgi.exe'].instanceMaxRequests:10000 \
-#    && %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+[fullPath='c:\php\php-cgi.exe'].environmentVariables.[name='PHP_FCGI_MAX_REQUESTS',value='10000'] \
-#    && %windir%\system32\inetsrv\appcmd.exe set config -section:system.webServer/fastCgi /+[fullPath='c:\php\php-cgi.exe'].environmentVariables.[name='PHPRC',value='C:\php'] \
-#    && %windir%\system32\inetsrv\appcmd.exe set config /section:defaultDocument /enabled:true /+files.[value='index.php'] \
-#    && setx PATH /M %PATH%;C:\php \
-#    && setx PHP /M "C:\php" \
-#    && del C:\inetpub\wwwroot\* /Q
+    setx PHP /M "C:\php"
